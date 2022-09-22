@@ -1,0 +1,14 @@
+html {
+    width: 100vw;
+    height: 100vh;
+    font-family: sans-serif;
+}
+
+body {
+    background: linear-gradient(45deg, #F5EFE6, #CFD2CF 50%)
+}
+
+h3 {
+    text-align: center;
+    text-transform: uppercase;
+}
