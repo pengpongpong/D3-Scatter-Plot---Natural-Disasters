@@ -61,8 +61,8 @@ const mousemove = function(e) {
             <strong>Year:</strong> ${e.toElement.__data__["Year"]}<br>
             `
             )
-        .style("left", `${e.offsetX + 40}px`)
-        .style("top", `${e.offsetY - 7}px`)
+        .style("left", `${e.pageX + 15}px`)
+        .style("top", `${e.pageY}px`)
 }
 
 const mouseleave = function(e) {
@@ -89,6 +89,14 @@ const flood = "#97D2EC"
 const tropical = "#FD841F"
 const earth_tsunami = "#002B5B"
 
+const type = ["Earthquake", "Landslide", "Heat wave", "Tsunami", "Flood", "Tropical cyclone", "Earthquake, Tsunami"]
+const colors = [earthquake, landslide, heatwave, tsunami, flood, tropical, earth_tsunami]
+
+// scale type to color
+let color = d3.scaleOrdinal()
+            .domain(type)
+            .range(colors)
+
 svg.append("g")
     .selectAll("circle")
     .data(data)
@@ -97,22 +105,7 @@ svg.append("g")
         .attr("cy", d => y(d["Death toll"]))
         .attr("r", d => 7)
         .style("border-radius", "5px")
-        .style("fill", ((d, i) => {
-            if(d["Type"] === "Heat wave")
-                {return heatwave}
-            if(d["Type"] === "Earthquake")
-                {return earthquake}
-            if(d["Type"] === "Landslide")
-                {return landslide}
-            if(d["Type"] === "Tsunami")
-                {return tsunami} 
-            if(d["Type"] === "Flood")
-                {return flood}
-            if(d["Type"] === "Tropical cyclone")
-                {return tropical} 
-            if(d["Type"] === "Earthquake, Tsunami")
-                {return earth_tsunami} 
-            }))
+        .style("fill", (d, i) => color(d.Type))
         .on("mousemove", mousemove)
         .on("mouseover", mouseover)
         .on("mouseleave", mouseleave)
@@ -128,14 +121,6 @@ svg.append("g")
     .attr("transform", `translate(${margin.left}, 0)`)
     .attr("font-weight", "bold")
     .call(d3.axisLeft(y).tickSizeOuter(0));
-
-const type = ["Earthquake", "Landslide", "Heatwave", "Tsunami", "Flood", "Tropical Cyclone", "Earthquake & Tsunami"]
-const colors = [earthquake, landslide, heatwave, tsunami, flood, tropical, earth_tsunami]
-
-// scale type to color
-let color = d3.scaleOrdinal()
-            .domain(type)
-            .range(colors)
 
 // legend
 const size = 10
